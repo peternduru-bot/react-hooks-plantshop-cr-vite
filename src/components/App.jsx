@@ -1,14 +1,18 @@
 import React from "react";
-import Header from "./Header";
-import PlantPage from "./PlantPage";
 
-function App() {
+function Search({ searchTerm, onSearchChange }) {
   return (
-    <div className="app">
-      <Header />
-      <PlantPage />
+    <div className="searchbar">
+      <label htmlFor="search">Search Plants:</label>
+      <input
+        type="text"
+        id="search"
+        placeholder="Type a name to search..."
+        value={searchTerm}
+        onChange={(e) => onSearchChange(e.target.value)}
+      />
     </div>
   );
 }
 
-export default App;
+export default Search;
