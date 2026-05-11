@@ -1,18 +1,33 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import NewPlantForm from "./NewPlantForm";
+import PlantList from "./PlantList";
+import Search from "./Search";
 
-function Search({ searchTerm, onSearchChange }) {
+function App() {
+  const [plants, setPlants] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  useEffect(() => {
+    fetch("http://localhost:6001/plants")
+      .then((r) => r.json())
+      .then((data) => setPlants(data));
+  }, []);
+
+  function handleAddPlant(newPlant) {
+    setPlants([...plants, newPlant]);
+  }
+
+  const displayedPlants = plants.filter((plant) => {
+    return plant.name.toLowerCase().includes(searchTerm.toLowerCase());
+  });
+
   return (
-    <div className="searchbar">
-      <label htmlFor="search">Search Plants:</label>
-      <input
-        type="text"
-        id="search"
-        placeholder="Type a name to search..."
-        value={searchTerm}
-        onChange={(e) => onSearchChange(e.target.value)}
-      />
-    </div>
+    <main>
+      <NewPlantForm onAddPlant={handleAddPlant} />
+      <Search searchTerm={searchTerm} onSearchChange={setSearchTerm} />
+      <PlantList plants={displayedPlants} />
+    </main>
   );
 }
 
-export default Search;
+export default App;
